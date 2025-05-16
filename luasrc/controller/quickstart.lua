@@ -10,10 +10,7 @@ function index()
         if nixio.fs.access("/usr/lib/lua/luci/view/quickstart/main_dev.htm") then
             entry({"admin", "quickstart_dev"}, call("quickstart_dev", {index={"admin", "quickstart_dev"}})).leaf = true
         end
-        entry({"admin", "nas", "raid"}, call("quickstart_index", {index={"admin", "nas"}}), _("RAID"), 10).leaf = true
-        entry({"admin", "nas", "smart"}, call("quickstart_index", {index={"admin", "nas"}}), _("S.M.A.R.T."), 11).leaf = true
-        entry({"admin", "network", "interfaceconfig"}, call("quickstart_index", {index={"admin", "network"}}), _("NetworkPort"), 11).leaf = true
-
+        
         entry({"admin", "nas", "quickstart"}).dependent = false
         entry({"admin", "nas", "quickstart", "auto_setup"}, post("auto_setup"))
         entry({"admin", "nas", "quickstart", "setup_result"}, call("setup_result"))
@@ -30,21 +27,12 @@ function redirect_fallback()
     luci.http.redirect(luci.dispatcher.build_url("admin", "status"))
 end
 
-local function vue_lang()
-    local i18n = require("luci.i18n")
-    local lang = i18n.translate("quickstart_vue_lang")
-    if lang == "quickstart_vue_lang" or lang == "" then
-        lang = "en"
-    end
-    return lang
-end
-
 function quickstart_index(param)
-    luci.template.render("quickstart/main", {prefix=luci.dispatcher.build_url(unpack(param.index)),lang=vue_lang()})
+    luci.template.render("quickstart/main", {prefix=luci.dispatcher.build_url(unpack(param.index))})
 end
 
 function quickstart_dev(param)
-    luci.template.render("quickstart/main_dev", {prefix=luci.dispatcher.build_url(unpack(param.index)),lang=vue_lang()})
+    luci.template.render("quickstart/main_dev", {prefix=luci.dispatcher.build_url(unpack(param.index))})
 end
 
 function auto_setup()
